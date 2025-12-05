@@ -4713,62 +4713,6 @@ const initSliders = () => {
 window.addEventListener("load", () => {
   initSliders();
 });
-let addWindowScrollEvent = false;
-function headerScroll() {
-  addWindowScrollEvent = true;
-  const header = document.querySelector("header.header");
-  const headerShow = header.hasAttribute("data-header-scroll-show");
-  const headerShowTimer = +header.dataset.scrollShow || 500;
-  const startPoint = +header.dataset.scroll || 1;
-  let scrollDirection = 0;
-  let timer;
-  document.addEventListener("windowScroll", (e) => {
-    const { scrollTop } = e.detail;
-    if (scrollTop >= startPoint) {
-      toggleClass(header, "header--scroll", true);
-      if (headerShow) {
-        if (scrollTop > scrollDirection) {
-          clearTimeout(timer);
-          toggleClass(header, "header--show", false);
-        } else {
-          toggleClass(header, "header--show", true);
-        }
-        timer = setTimeout(() => {
-          toggleClass(header, "header--show", true);
-        }, headerShowTimer);
-      }
-    } else {
-      toggleClass(header, "header--scroll", false);
-      if (headerShow) {
-        toggleClass(header, "header--show", false);
-      }
-    }
-    scrollDirection = scrollTop <= 0 ? 0 : scrollTop;
-  });
-  function toggleClass(element, className, condition) {
-    if (condition) {
-      if (!element.classList.contains(className)) {
-        element.classList.add(className);
-      }
-    } else {
-      if (element.classList.contains(className)) {
-        element.classList.remove(className);
-      }
-    }
-  }
-}
-setTimeout(() => {
-  if (addWindowScrollEvent) {
-    window.addEventListener("scroll", () => {
-      const scrollTop = window.scrollY;
-      const windowScroll = new CustomEvent("windowScroll", {
-        detail: { scrollTop }
-      });
-      document.dispatchEvent(windowScroll);
-    });
-  }
-}, 0);
-headerScroll();
 const debounce = (func, delay = 250) => {
   return function(...args) {
     let timer;
@@ -4879,6 +4823,62 @@ const menuInit = () => {
   }
 };
 menuInit();
+let addWindowScrollEvent = false;
+function headerScroll() {
+  addWindowScrollEvent = true;
+  const header = document.querySelector("header.header");
+  const headerShow = header.hasAttribute("data-header-scroll-show");
+  const headerShowTimer = +header.dataset.scrollShow || 500;
+  const startPoint = +header.dataset.scroll || 1;
+  let scrollDirection = 0;
+  let timer;
+  document.addEventListener("windowScroll", (e) => {
+    const { scrollTop } = e.detail;
+    if (scrollTop >= startPoint) {
+      toggleClass(header, "header--scroll", true);
+      if (headerShow) {
+        if (scrollTop > scrollDirection) {
+          clearTimeout(timer);
+          toggleClass(header, "header--show", false);
+        } else {
+          toggleClass(header, "header--show", true);
+        }
+        timer = setTimeout(() => {
+          toggleClass(header, "header--show", true);
+        }, headerShowTimer);
+      }
+    } else {
+      toggleClass(header, "header--scroll", false);
+      if (headerShow) {
+        toggleClass(header, "header--show", false);
+      }
+    }
+    scrollDirection = scrollTop <= 0 ? 0 : scrollTop;
+  });
+  function toggleClass(element, className, condition) {
+    if (condition) {
+      if (!element.classList.contains(className)) {
+        element.classList.add(className);
+      }
+    } else {
+      if (element.classList.contains(className)) {
+        element.classList.remove(className);
+      }
+    }
+  }
+}
+setTimeout(() => {
+  if (addWindowScrollEvent) {
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const windowScroll = new CustomEvent("windowScroll", {
+        detail: { scrollTop }
+      });
+      document.dispatchEvent(windowScroll);
+    });
+  }
+}, 0);
+headerScroll();
 const objectModules = {};
 class FormsValidation {
   constructor(options) {
